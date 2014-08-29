@@ -101,7 +101,7 @@ There may be many other issues lurking under the surface... so take care ><
 
 ## Cross-Compiling Your Own Kernel (Optional!)
 
-If you have PC running Gentoo Linux, you can easily compile your own kernel for a B3, using the [crossdev](https://www.gentoo.org/proj/en/base/embedded/handbook/?part=1&chap=2#doc_chap2) tool. Here's how.
+If you have a PC running Gentoo Linux, you can easily compile your own kernel for a B3, using the [crossdev](https://www.gentoo.org/proj/en/base/embedded/handbook/?part=1&chap=2#doc_chap2) tool. Here's how.
 
 First, since `crossdev` uses the first overlay it finds as home, if you use [layman](https://wiki.gentoo.org/wiki/Layman), then you should do the following:
 ```
