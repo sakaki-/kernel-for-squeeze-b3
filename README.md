@@ -7,13 +7,13 @@ Updated kernel (3.16.1) for Excito B3 miniserver running Debian squeeze
 <img src="https://wiki.gentoo.org/images/0/03/Excito_b3.jpg" alt="Excito B3" width="250px" align="right"/>
 This project contains a compiled **3.16.1** kernel and module set for the Excito B3 miniserver. You can use it as a replacement for the 2.6.39.4-11 kernel on your B3, running the standard Excito Debian squeeze system (no Gentoo involved!). <br>The supplied kernel has the necessary code to switch off the L2 cache (per [this link](https://lists.debian.org/debian-boot/2012/08/msg00804.html)) prepended, and the kirkwood-b3 device tree blob appended. Accordingly, no [U-Boot](http://www.denx.de/wiki/U-Boot/WebHome) flashing or Excito patch set is required. <br>Note that this kernel has **not** been extensively tested, and is provided as a convenience only. When using it, the 'stock' Excito software installation on the B3 still seems broadly to work (e.g., the admin web interface is accessible via the LAN port), but some features are broken (a fuller description is provided below).
 
-> The kernel was built on a Gentoo PC using [crossdev](https://www.gentoo.org/proj/en/base/embedded/handbook/?part=1&chap=2#doc_chap2), based on `sys-kernel/vanilla-sources-3.16.1`. If you have a PC running Gentoo, instructions for cross-compiling your own kernel are provided at the end of this document ^-^
-
 Download a 'deploy_root' tarball [here](https://github.com/sakaki-/kernel-for-squeeze-b3/releases/download/3.16.1-b3/deploy_root.tar.xz) (its digital signature is [here](https://github.com/sakaki-/kernel-for-squeeze-b3/releases/download/3.16.1-b3/deploy_root.tar.xz.asc)), or use `wget` (as per the instructions below).
 
-> Warning: the supplied kernel and modules are provided 'as is' and without warranty. Proceed at your own risk, and make sure you have a rescue system to hand (and have tested it *before* you attempt the install). Read the instructions provided below, and don't proceed if you are at all unsure.
+> The kernel was built on a Gentoo PC using [crossdev](https://www.gentoo.org/proj/en/base/embedded/handbook/?part=1&chap=2#doc_chap2), based on `sys-kernel/vanilla-sources-3.16.1`. If you have a PC running Gentoo, instructions for cross-compiling your own kernel are provided at the end of this document ^-^
 
 ## Downloading, Verifying and Unpacking
+
+> Warning: the supplied kernel and modules are provided 'as is' and without warranty. Proceed at your own risk, and make sure you have a rescue system to hand (and have tested it *before* you attempt the install). Read the instructions provided below, and don't proceed if you are at all unsure.
 
 Get root on your B3, then issue:
 ```
@@ -55,7 +55,7 @@ Backup any vital data, make sure you have a rescue system to hand (such as my [G
 ~ # reboot
 ```
 
-Note that the blue LED will **not** come on (see "Known Limitations", below), so your B3 may look like it has shut down again - however, the system *should* boot, and after a minute or so, the standard Excito web interface will be available (via Ethernet). The WiFi (even if fitted) will *not* come up, as the wireless interface name has changed (it has migrated from wlan0 to wlp1s0).
+Note that the blue LED will **not** come on (see "Known Limitations", below), so your B3 may look like it has shut down again - however, the system *should* boot, and after a minute or so, the standard Excito web interface will be available (via Ethernet). WiFi access *will* come up, *providing* you have already configured it prior to switching kernels - there seems to be some problem configuring it via the web interface under 3.16.1.
 
 ## Reverting to the Previous Version
 
@@ -89,7 +89,13 @@ and you should be back to normal!
 
 As of version 3.15 of the kernel, the B3's device-tree information (file `arch/arm/boot/dts/kirkwood-b3.dts` in the kernel source directory) has been integrated into the mainline. This obviates the need for Excito patches to access the B3's idiosyncratic hardware (such as LEDs, rear button etc.; standard items such as disk drives are unaffected of course), but also means that the existing Excito software that uses these devices will not work correctly under the 3.16.1 kernel supplied here. For example, the blue LED on the front of the B3 will **not** come on after boot, the rear button will not shut the system down (you'l have to do this from the command line) etc.
 
-Furthermore, the WiFi adaptor (if fitted) is no longer accessed via wlan0, but wlp0s1; this should be relatively easy to address (but does prevent the 'stock' Excito software from configuring WiFi).
+There are other issues which I am unqualified to debug... For example, WiFi access works provided you have configured it prior to upgrading your kernel, but you can't configure WiFi using the Excito web interface post-upgrade (other web admin functions seem to work, however).
+
+> The compiled-in kernel command line used is:
+```
+root=/dev/sda1 console=ttyS0,115200n8 earlyprintk
+```
+so the [serial console](http://wiki.excito.org/wiki/index.php/Serial_Console_Access_on_B3) (if you have one attached) can be used to monitor early boot.
 
 There may be many other issues lurking under the surface... so take care ><
 
@@ -174,7 +180,7 @@ gentoo_pc linux-3.16.1-gentoo # make ARCH="arm" \
 ```
 Next, download the [provided build script](https://github.com/sakaki-/kernel-for-squeeze-b3/blob/master/build_image.sh) into `/root/build_image.sh`, and make it executable:
 ```
-gentoo_pc linux-3.16.1-gentoo # wget -c -O /root/build_image.sh \
+gentoo_pc linux-3.16.1-gentoo # wget -c --no-check-certificate -O /root/build_image.sh \
   https://github.com/sakaki-/kernel-for-squeeze-b3/raw/master/build_image.sh
 gentoo_pc linux-3.16.1-gentoo # chmod +x /root/build_image.sh
 ```
