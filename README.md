@@ -125,6 +125,12 @@ so the [serial console](http://wiki.excito.org/wiki/index.php/Serial_Console_Acc
 
 There may be many other issues lurking under the surface... so take care ><
 
+## Kernel Headers etc.
+
+To save space (and as they aren't necessary unless you're going to be compiling software), I have omitted the kernel headers in the supplied package. If you need them, since I have used a vanilla tree you can just pull the [3.16.1 tarball](https://www.kernel.org/pub/linux/kernel/v3.x/linux-3.16.1.tar.xz) from kernel.org (and then, if you like, ["make headers_install"](https://www.kernel.org/doc/Documentation/kbuild/headers_install.txt) to sanitize them).
+
+Also, the modules in this package have been supplied unstripped. Feel free to [strip them](http://unix.stackexchange.com/questions/25421/how-much-strip1-ing-is-okay-for-kernel-modules) yourself if desired.
+
 ## Cross-Compiling Your Own Kernel (Optional!)
 
 If you have a PC running Gentoo Linux, you can easily compile your own kernel for a B3, using the [crossdev](https://www.gentoo.org/proj/en/base/embedded/handbook/?part=1&chap=2#doc_chap2) tool. Here's how.
