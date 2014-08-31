@@ -11,6 +11,13 @@ Download a 'deploy_root' tarball [here](https://github.com/sakaki-/kernel-for-sq
 
 > The kernel was built on a Gentoo PC using [crossdev](https://www.gentoo.org/proj/en/base/embedded/handbook/?part=1&chap=2#doc_chap2), based on `sys-kernel/vanilla-sources-3.16.1`. If you have a PC running Gentoo, instructions for cross-compiling your own kernel are provided at the end of this document ^-^
 
+## Is this the Right Kernel for You?
+
+If you are interested in upgrading the kernel on your B3, there are a number of choices open to you:
+* If you want all your existing Excito software to work fully, without any modifications, (or possibly if you are looking to upgrade to Debian Wheezy) you should consider using the 3.2.62 version in the [community-b3-kernel](https://github.com/Excito/community-b3-kernel) GitHub project, and maintained by MouettE (see also [this thread](http://forum.excito.net/viewtopic.php?f=7&t=5364) on the Excito forum). It contains all the relevant Excito and Debian patches.
+* If you just want to quickly try out running your B3 under an up-to-date kernel, have a look at my [Gentoo on B3 live-USB image](https://github.com/sakaki-/gentoo-on-b3). This is a complete, bootable Gentoo Linux system (with kernel 3.16.1). You can write the image to a USB key, then boot your B3 from that, *without* affecting any installed system on your main hard drive.
+* If you'd like to use a 'vanilla' 3.16.1 kernel on your (Debian squeeze) B3, then try the version included in this project. As the Excito patches are unapplied, some Excito userland software (which e.g. controls the LED on the front panel) will not work, unless modified (see Known Limitations, below). On the other hand, because this is a 'vanilla' kernel, if you are content with the remaining functionality, it will be easier to keep your kernel upgraded in future.
+
 ## Downloading, Verifying and Unpacking
 
 > Warning: the supplied kernel and modules are provided 'as is' and without warranty. Proceed at your own risk, and make sure you have a rescue system to hand (and have tested it *before* you attempt the install). Read the instructions provided below, and don't proceed if you are at all unsure.
@@ -89,6 +96,25 @@ and you should be back to normal!
 
 As of version 3.15 of the kernel, the B3's device-tree information (file `arch/arm/boot/dts/kirkwood-b3.dts` in the kernel source directory) has been integrated into the mainline. This obviates the need for Excito patches to access the B3's idiosyncratic hardware (such as LEDs, rear button etc.; standard items such as disk drives are unaffected of course), but also means that the existing Excito software that uses these devices will not work correctly under the 3.16.1 kernel supplied here. For example, the blue LED on the front of the B3 will **not** come on after boot, the rear button will not shut the system down (you'l have to do this from the command line) etc.
 
+As a concrete example of how things have changed, consider the front LED. On a 'stock' B3, to change the LED to green, per [these instructions](http://wiki.excito.org/wiki/index.php/Let_your_B3_beep_and_change_the_LED_color) you would execute:
+```
+stock_b3 # echo 2 > /sys/bus/platform/devices/bubbatwo/color
+```
+Whereas in the 3.16.1 kernel, you would need instead to use:
+```
+3.16.1_b3 # echo -n 1 > /sys/class/leds/bubba3\:green\:programming/brightness
+```
+Or, more properly:
+```
+3.16.1_b3 # cat /sys/class/leds/bubba3\:green\:programming/max_brightness > \
+  /sys/class/leds/bubba3\:green\:programming/brightness
+```
+You can see the kirkwood-b3 device tree file [here](https://github.com/sakaki-/gentoo-on-b3/blob/master/reference/kirkwood-b3.dts), from which the new paths can easily be inferred.
+
+Of course, it's not all bad: because the LED is now a standard kernel device, all the normal fun stuff like [triggers](http://elinux.org/EBC_Exercise_10_Flashing_an_LED#Flashing_the_user_LEDs) becomes available. For example, you could write:
+```
+3.16.1_b3 #  echo -n "heartbeat" > /sys/class/leds/bubba3\:green\:programming/trigger
+```
 There are other issues which I am unqualified to debug... For example, WiFi access works provided you have configured it prior to upgrading your kernel, but you can't configure WiFi using the Excito web interface post-upgrade (other web admin functions seem to work, however).
 
 > The compiled-in kernel command line used is:
