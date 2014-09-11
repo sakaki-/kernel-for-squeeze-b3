@@ -98,7 +98,8 @@ As of version 3.15 of the kernel, the B3's device-tree information (file `arch/a
 
 As a concrete example of how things have changed, consider the front LED. On a 'stock' B3, to change the LED to green, per [these instructions](http://wiki.excito.org/wiki/index.php/Let_your_B3_beep_and_change_the_LED_color) you would execute:
 ```
-stock_b3 # echo 2 > /sys/bus/platform/devices/bubbatwo/color
+stock_b3 # echo lit > /sys/bus/platform/devices/bubbatwo/ledmode && \
+  echo 2 > /sys/bus/platform/devices/bubbatwo/color
 ```
 Whereas in the 3.16.1 kernel, you would need instead to use:
 ```
