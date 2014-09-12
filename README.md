@@ -42,7 +42,7 @@ Assuming that reports 'Good signature', you can proceed. Untar the package:
 
 ## Installation and Boot
 
-You will now have a new directory, `install_root`. This contains the kernel, modules and firmware. Begin by backing up your old kernel and firmware (we'll can leave the old modules in place, as they live in a version-distinguished directory (`/lib/modules/2.6.39.4-11`)):
+You will now have a new directory, `deploy_root`. This contains the kernel, modules and firmware. Begin by backing up your old kernel and firmware (we'll can leave the old modules in place, as they live in a version-distinguished directory (`/lib/modules/2.6.39.4-11`)):
 ```
 ~ # cp /boot/uImage /boot/uImage.orig
 ~ # cp -a /lib/firmware /lib/firmware.orig
