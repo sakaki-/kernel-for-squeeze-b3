@@ -194,7 +194,7 @@ gentoo_pc ~ # echo "sys-kernel/vanilla-sources freedist" >> \
 Now we can grab the sources (note we use `--nodeps` here; we don't actually want to cross-emerge the `perl` etc. tools that'll be used to patch the sources, as you already have them in your native architecture (`amd64` or whatever) and they'll be called from there):
 ```
 gentoo_pc ~ # ARCH="arm" armv5tel-softfloat-linux-gnueabi-emerge \
-  -av --nodeps =sys-kernel/vanill-sources-3.16.1
+  -av --nodeps =sys-kernel/vanilla-sources-3.16.1
 ```
 That's all the one-off steps out of the way. Now, go into the source directory (`crossdev` automatically keeps things separate from your normal sysroot, to avoid pollution):
 ```
