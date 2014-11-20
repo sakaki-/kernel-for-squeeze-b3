@@ -4,7 +4,7 @@ Updated kernel (3.16.1) for Excito B3 miniserver running Debian squeeze
 
 ## Description
 
-<img src="https://wiki.gentoo.org/images/0/03/Excito_b3.jpg" alt="Excito B3" width="250px" align="right"/>
+<img src="https://raw.githubusercontent.com/sakaki-/resources/master/excito/b3/Excito_b3.jpg" alt="Excito B3" width="250px" align="right"/>
 This project contains a compiled **3.16.1** kernel and module set for the Excito B3 miniserver. You can use it as a replacement for the 2.6.39.4-11 kernel on your B3, running the standard Excito Debian squeeze system (no Gentoo involved!). <br>The supplied kernel has the necessary code to switch off the L2 cache (per [this link](https://lists.debian.org/debian-boot/2012/08/msg00804.html)) prepended, and the kirkwood-b3 device tree blob appended. Accordingly, no [U-Boot](http://www.denx.de/wiki/U-Boot/WebHome) flashing or Excito patch set is required. <br>Note that this kernel has **not** been extensively tested, and is provided as a convenience only. When using it, the 'stock' Excito software installation on the B3 still seems broadly to work (e.g., the admin web interface is accessible via the LAN port), but some features are broken (a fuller description is provided below).
 
 Download a 'deploy_root' tarball [here](https://github.com/sakaki-/kernel-for-squeeze-b3/releases/download/3.16.1-b3/deploy_root.tar.xz) (its digital signature is [here](https://github.com/sakaki-/kernel-for-squeeze-b3/releases/download/3.16.1-b3/deploy_root.tar.xz.asc)), or use `wget` (as per the instructions below).
